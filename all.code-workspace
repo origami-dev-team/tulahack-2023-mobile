@@ -1,0 +1,47 @@
+{
+	"folders": [
+		{
+			"path": "Origami.ComixMaker"
+		},
+		{
+			"path": "Origami.Api"
+		}
+	],
+	"settings": {
+		"dotrush.additionalWorkspaceArguments": "DXUseProjectReferences=True",
+		"files.exclude": {
+			"**/obj": true,
+			"**/bin": true
+		},
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": ".NET Meteor Debugger",
+				"type": "dotnet-meteor.debugger",
+				"request": "launch",
+				"preLaunchTask": "dotnet-meteor: Build"
+			}
+		]
+	},
+	"tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "type": "dotnet-meteor.task",
+                "target": "build",
+                "problemMatcher": "$dotnet-meteor.problemMatcher",
+                "label": "dotnet-meteor: Build",
+                "args": [
+                    "-p:TreatWarningsAsErrors=false"
+					"-p:DXUseProjectReferences=true"
+                ],
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                }
+            }
+        ]
+    }
+}
