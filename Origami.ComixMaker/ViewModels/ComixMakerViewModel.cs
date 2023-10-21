@@ -53,6 +53,15 @@ public class ComixMakerViewModel : INotifyPropertyChanged {
         }
     }
 
+    private BottomSheetState publishBottomSheetState = BottomSheetState.Hidden;
+    public BottomSheetState PublishBottomSheetState {
+        get => publishBottomSheetState;
+        set {
+            publishBottomSheetState = value;
+            OnPropertyChanged(nameof(PublishBottomSheetState));
+        }
+    }
+
     private bool isBackgroundPickedInv = true;
     public bool IsBackgroundPickedInv {
         get => isBackgroundPickedInv;

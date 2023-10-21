@@ -11,7 +11,8 @@
              x:Class="Origami.ComixMaker.ComixMakerPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Поделиться" Clicked="Share_Clicked"/>
+        <ToolbarItem IconImageSource="arrow" Clicked="Share_Clicked"/>
+        <ToolbarItem IconImageSource="done" Clicked="Publish_Clicked"/>
     </ContentPage.ToolbarItems>
 
     <Grid>
@@ -69,9 +70,9 @@
         <dxc:BottomSheet State="{Binding AIBackgroundBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="48" HalfExpandedRatio="0.6">
             <VerticalStackLayout Margin="24,0" Spacing="16">
                 <Label Text="Введите запрос для генерации фона" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
-                <dxe:MultilineEdit x:Name="AITextField1" PlaceholderText="Хижина в лесу" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="60" MaxLineCount="3" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never"/>
+                <dxe:MultilineEdit x:Name="AITextField1" PlaceholderColor="#B1B1B1" PlaceholderText="Хижина в лесу" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="60" MaxLineCount="3" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never"/>
                 <dx:DXButton Content="Создать фон" CornerRadius="12" Margin="24,0" Padding="0,16" BackgroundColor="#E8713F" Clicked="AIBGenerate_Clicked"/>
-                <dxcv:DXCollectionView x:Name="AIBackgroundView" BackgroundColor="Transparent" HeightRequest="200" Orientation="Horizontal" SelectionMode="Single">
+                <dxcv:DXCollectionView x:Name="AIBackgroundView" BackgroundColor="Transparent" HeightRequest="200" Orientation="Horizontal" SelectionMode="Single" SelectionChanged="AIBackgroundView_SelectionChanged">
                     <dxcv:DXCollectionView.ItemTemplate>
                         <DataTemplate>
                             <dx:DXBorder BackgroundColor="White" Margin="4" HeightRequest="175" CornerRadius="12">
@@ -85,7 +86,29 @@
 
         <!-- AI Character Sheet -->
         <dxc:BottomSheet State="{Binding AICharacterBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="48" HalfExpandedRatio="0.6">
-            
+            <VerticalStackLayout Margin="24,0" Spacing="16">
+                <Label Text="Введите запрос для генерации персонажа" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
+                <dxe:MultilineEdit x:Name="AITextField2" PlaceholderColor="#B1B1B1" PlaceholderText="Девочка в красной шапке" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="60" MaxLineCount="3" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never"/>
+                <dx:DXButton Content="Создать персонажа" CornerRadius="12" Margin="24,0" Padding="0,16" BackgroundColor="#E8713F" Clicked="AICGenerate_Clicked"/>
+                <dxcv:DXCollectionView x:Name="AICharacterView" BackgroundColor="Transparent" HeightRequest="200" Orientation="Horizontal" SelectionMode="Single" SelectionChanged="AICharacterView_SelectionChanged">
+                    <dxcv:DXCollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <dx:DXBorder BackgroundColor="White" Margin="4" HeightRequest="175" CornerRadius="12">
+                                <Image Source="{Binding}" Aspect="Center" />
+                            </dx:DXBorder>
+                        </DataTemplate>
+                    </dxcv:DXCollectionView.ItemTemplate>
+                </dxcv:DXCollectionView>
+            </VerticalStackLayout>
+        </dxc:BottomSheet>
+
+        <!-- Publish Sheet -->
+        <dxc:BottomSheet State="{Binding PublishBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="48" HalfExpandedRatio="0.4">
+            <VerticalStackLayout Margin="24,0" Spacing="16">
+                <Label Text="Публикация" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
+                <!-- <dxe:MultilineEdit x:Name="AITextField2" PlaceholderColor="#B1B1B1" PlaceholderText="Девочка в красной шапке" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="60" MaxLineCount="3" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never"/> -->
+                <dx:DXButton Content="Test button" CornerRadius="12" Margin="24,0" Padding="0,16" BackgroundColor="#E8713F" Clicked="AICGenerate_Clicked"/>
+            </VerticalStackLayout>
         </dxc:BottomSheet>
     </Grid>
 
