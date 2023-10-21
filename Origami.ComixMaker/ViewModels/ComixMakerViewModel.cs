@@ -23,6 +23,24 @@ public class ComixMakerViewModel : INotifyPropertyChanged {
         }
     }
 
+    private BottomSheetState characterPickerBottomSheetState = BottomSheetState.Hidden;
+    public BottomSheetState CharacterPickerBottomSheetState {
+        get => characterPickerBottomSheetState;
+        set {
+            characterPickerBottomSheetState = value;
+            OnPropertyChanged(nameof(CharacterPickerBottomSheetState));
+        }
+    }
+
+    private List<string>? predefinedCharacters = null;
+    public List<string>? PredefinedCharacters {
+        get => predefinedCharacters;
+        set {
+            predefinedCharacters = value;
+            OnPropertyChanged(nameof(PredefinedCharacters));
+        }
+    }
+
     private string? documentSource = null;
     public string? DocumentSource {
         get => documentSource;
@@ -40,7 +58,7 @@ public class ComixMakerViewModel : INotifyPropertyChanged {
         pageViewPort = new Rect(0, 0, 820, 1054);
     }
 
-    
+
     public void CleanGeneratedDocuments() {
         var documents = Directory.GetFiles(FileSystem.Current.AppDataDirectory, $"*_{DocumentGeneratedName}.pdf");
         foreach (var document in documents)
@@ -49,10 +67,10 @@ public class ComixMakerViewModel : INotifyPropertyChanged {
     public async Task GenerateComix() {
         var documentId = new Random().Next(0, 1000);
         var path = Path.Combine(FileSystem.Current.AppDataDirectory, $"{documentId}_{DocumentGeneratedName}.pdf");
-    
-		using (PdfDocumentProcessor processor = new PdfDocumentProcessor()) {
-			processor.CreateEmptyDocument();
-			foreach (var frameData in FramesData) {
+
+        using (PdfDocumentProcessor processor = new PdfDocumentProcessor()) {
+            processor.CreateEmptyDocument();
+            foreach (var frameData in FramesData) {
                 using (PdfGraphics graph = processor.CreateGraphics()) {
                     await DrawBackgroundImage(graph, frameData);
                     DrawText(graph, frameData);
@@ -60,29 +78,25 @@ public class ComixMakerViewModel : INotifyPropertyChanged {
                 }
             }
 
-			processor.SaveDocument(path);
+            processor.SaveDocument(path);
             processor.CloseDocument();
-		}
+        }
 
-		if (!File.Exists(path))
-			throw new FileNotFoundException(path);
+        if (!File.Exists(path))
+            throw new FileNotFoundException(path);
 
-		DocumentSource = path;
+        DocumentSource = path;
         FramesData.Add(new ComixFrameBuilder());
     }
-    
+
     private async Task DrawBackgroundImage(PdfGraphics graph, ComixFrameBuilder frameData) {
         if (string.IsNullOrEmpty(frameData.BackgroundImagePath))
             return;
-    
-        // Download image from the internet and save it to the local storage
-        // var savePath = Path.Combine(FileSystem.Current.AppDataDirectory, "background.jpg");
-        // var stream = await new HttpClient().GetStreamAsync("https://i.stack.imgur.com/S3kLD.jpg");
-        // using (var fileStream = File.Create(savePath))
-        //     await stream.CopyToAsync(fileStream);
 
+        using var stream = frameData.BackgroundImagePath.StartsWith("http")
+            ? await GetStreamFromUrl(frameData.BackgroundImagePath)
+            : new FileStream(frameData.BackgroundImagePath, FileMode.Open, FileAccess.Read);
 
-        using var stream = new FileStream(frameData.BackgroundImagePath, FileMode.Open, FileAccess.Read);
         using var image = DXImage.FromStream(stream);
         var pageCenter = new RectangleF(0, 0, (float)pageViewPort.Width, (float)pageViewPort.Height);
         graph.DrawImage(image, pageCenter);
@@ -97,12 +111,18 @@ public class ComixMakerViewModel : INotifyPropertyChanged {
         const float textMargin = 16f;
         var textPopupFrame = new RectangleF(0, (float)pageViewPort.Height * 0.8f, (float)pageViewPort.Width, (float)pageViewPort.Height * 0.2f);
         var textFrame = new RectangleF(textPopupFrame.Left + textMargin, textPopupFrame.Top + textMargin, textPopupFrame.Width - textMargin * 2, textPopupFrame.Height - textMargin * 2);
-        
+
         graph.FillRectangle(new DXSolidBrush(Color.Black), textPopupFrame);
         graph.DrawString(frameData.Text, font, whiteBrush, textFrame);
-	}
-    
-    
+    }
+
+
+    private async Task<Stream> GetStreamFromUrl(string url) {
+        using var client = new HttpClient();
+        var bytes = await client.GetByteArrayAsync(url);
+        return new MemoryStream(bytes);
+    }
+
     private void OnPropertyChanged(string propertyName) {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

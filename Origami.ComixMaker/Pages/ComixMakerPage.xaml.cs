@@ -1,5 +1,6 @@
 ﻿using DevExpress.Maui.Controls;
 using DevExpress.Maui.Editors;
+using Origami.Api;
 
 namespace Origami.ComixMaker;
 
@@ -12,6 +13,13 @@ public partial class ComixMakerPage : ContentPage {
     
         InitializeComponent();
         BindingContext = viewModel;
+    }
+
+    protected override void OnAppearing() {
+        base.OnAppearing();
+        this.DoSafe(async() => {
+            viewModel.PredefinedCharacters = await Repository.GetAllCharacters();
+        });
     }
 
     private async void Share_Clicked(object sender, EventArgs e) {
@@ -27,7 +35,6 @@ public partial class ComixMakerPage : ContentPage {
 
     private void Button_Clicked(object sender, EventArgs e) {
         viewModel.CreateFrameBottomSheetState = BottomSheetState.HalfExpanded;
-        var test = new MultilineEdit();
     }
 
     private void Text_Changed(object? sender, EventArgs e) {
@@ -46,7 +53,20 @@ public partial class ComixMakerPage : ContentPage {
         viewModel.FramesData.Last().BackgroundImagePath = result.FullPath;
     }
 
-    private async void Button_Clicked2(object sender, EventArgs e) {
+    private void Prefedined_Clicked(object sender, EventArgs e) {
+        viewModel.CharacterPickerBottomSheetState = BottomSheetState.HalfExpanded;
+    }
+
+    private void CollectionView_SelectionChanged(object? sender, SelectionChangedEventArgs e) {
+        var item = e.CurrentSelection.FirstOrDefault();
+        if (item == null)
+            return;
+
+        viewModel.FramesData.Last().BackgroundImagePath = (string)item;
+        viewModel.CharacterPickerBottomSheetState = BottomSheetState.Hidden;
+    }
+
+    private async void Generate_Clicked(object sender, EventArgs e) {
         viewModel.CleanGeneratedDocuments();
         await viewModel.GenerateComix();
         TextField.Text = string.Empty;

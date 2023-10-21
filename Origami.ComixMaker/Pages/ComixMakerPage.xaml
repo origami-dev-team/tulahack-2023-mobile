@@ -37,14 +37,28 @@
                 <Label Text="Выбор персонажа" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
                     <dx:DXButton Icon="user_ai" IconColor="#E8713F" Content="Созданные ИИ" Padding="0,16" IconIndent="0" TextColor="#737373" IconWidth="50" IconHeight="50" CornerRadius="12" BackgroundColor="White" Grid.Column="0"/>
-                    <dx:DXButton Icon="users" IconColor="#E8713F" Content="Готовые" Padding="0,16" TextColor="#737373" IconWidth="50" IconHeight="50" CornerRadius="12" BackgroundColor="White" Grid.Column="1"/>
+                    <dx:DXButton Icon="users" IconColor="#E8713F" Content="Готовые" Padding="0,16" TextColor="#737373" IconWidth="50" IconHeight="50" CornerRadius="12" BackgroundColor="White" Clicked="Prefedined_Clicked" Grid.Column="1"/>
                 </Grid>
 
                 <Label Text="Ввод текста для кадра" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
                 <dxe:MultilineEdit x:Name="TextField" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="90" MaxLineCount="5" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never" TextChanged="Text_Changed"/>
 
-                <dx:DXButton Content="Сгенерировать" Margin="32,0" CornerRadius="12" Padding="0,16" BackgroundColor="#E8713F" Clicked="Button_Clicked2"/>
+                <dx:DXButton Content="Сгенерировать" Margin="32,0" CornerRadius="12" Padding="0,16" BackgroundColor="#E8713F" Clicked="Generate_Clicked"/>
             </VerticalStackLayout>
+        </dxc:BottomSheet>
+
+        <!-- Sheet -->
+        <dxc:BottomSheet State="{Binding CharacterPickerBottomSheetState}">
+            <CollectionView ItemsSource="{Binding PredefinedCharacters}" SelectionMode="Single" SelectionChanged="CollectionView_SelectionChanged">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="3"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding}" Aspect="AspectFill" HeightRequest="120"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </dxc:BottomSheet>
     </Grid>
 
