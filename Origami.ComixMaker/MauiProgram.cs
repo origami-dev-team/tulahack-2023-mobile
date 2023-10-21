@@ -1,5 +1,6 @@
 ﻿using DevExpress.Maui;
 using DotNet.Meteor.HotReload.Plugin;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace Origami.ComixMaker;
 
@@ -8,7 +9,8 @@ public static class MauiProgram {
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .UseDevExpress();
+            .UseDevExpress()
+            .UseSkiaSharp();
 
 #if DEBUG
         builder.EnableHotReload();

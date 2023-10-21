@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dx="clr-namespace:DevExpress.Maui.Core;assembly=DevExpress.Maui.Core"
+             xmlns:dxpdf="clr-namespace:DevExpress.Maui.Pdf;assembly=DevExpress.Maui.Pdf"
+             xmlns:dxc="clr-namespace:DevExpress.Maui.Controls;assembly=DevExpress.Maui.Controls"
+             xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
+             Title="Комикс"
+             x:Class="Origami.ComixMaker.ComixMakerPage">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Поделиться"/>
+    </ContentPage.ToolbarItems>
+
+    <Grid>
+        <!-- Preview -->
+        <dxpdf:PdfViewer x:Name="pdfViewer" MaxZoomFactor="1" MinZoomFactor="1" DocumentSource="{Binding DocumentSource}"/>
+
+        <!-- Bottom bar -->
+        <VerticalStackLayout VerticalOptions="End" Margin="16,12" Spacing="4">
+            <dx:DXButton ButtonType="Outlined" BackgroundColor="#DEDEDE" BorderThickness="3" BorderColor="White" IconColor="White" Icon="plus" CornerRadius="20" IconWidth="54" IconHeight="54" Clicked="Button_Clicked"/>
+            <Label Text="Чтобы добавить новую часть комикса, нажмите плюс еще раз" TextColor="#9B9B9B" HorizontalTextAlignment="Center" Margin="8,0" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+
+        <!-- Sheet -->
+        <dxc:BottomSheet State="{Binding CreateFrameBottomSheetState}">
+            <VerticalStackLayout>
+                <Label Text="Test" />
+                <dx:DXButton Content="Pick Galley" Clicked="Button_Clicked3"/>
+                <dx:DXButton Content="Create" Clicked="Button_Clicked2"/>
+                <dxe:MultilineEdit BoxMode="Filled" TextChanged="Text_Changed"/>
+            </VerticalStackLayout>
+        </dxc:BottomSheet>
+    </Grid>
+
+</ContentPage>

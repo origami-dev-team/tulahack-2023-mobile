@@ -5,11 +5,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Origami.ComixMaker"
     Shell.FlyoutBehavior="Disabled"
+    Shell.BackgroundColor="#191919"
+    Shell.ForegroundColor="#FFFFFF"
     Title="Origami.ComixMaker">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <ShellContent Title="Лента"
+        ContentTemplate="{DataTemplate local:MainPage}" />
+
+    <!-- <TabBar>
+       <Tab Title="Лента"
+            Icon="tumb">
+           <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
+       </Tab>
+       <Tab Icon="plus">
+           <ShellContent ContentTemplate="{DataTemplate local:ComixMakerPage}" />
+       </Tab>
+       <Tab Title="Профиль"
+            Icon="user">
+           <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
+       </Tab>
+    </TabBar> -->
 
 </Shell>

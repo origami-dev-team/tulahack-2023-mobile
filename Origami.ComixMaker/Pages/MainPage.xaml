@@ -1,10 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dx="clr-namespace:DevExpress.Maui.Core;assembly=DevExpress.Maui.Core"
+             xmlns:dxcv="clr-namespace:DevExpress.Maui.CollectionView;assembly=DevExpress.Maui.CollectionView"
+             Title="Лента"
+             
              x:Class="Origami.ComixMaker.MainPage">
 
-    <ScrollView>
-        
-    </ScrollView>
+    <Grid>
+        <dxcv:DXCollectionView BackgroundColor="#EBE7E5"/>
+
+         <dx:DXBorder Margin="24,16" CornerRadius="26" VerticalOptions="End">
+            <Grid BackgroundColor="#191919" Padding="4" ColumnDefinitions="*,*,*">
+                <dx:DXButton ButtonType="ToolButton" IconPlacement="Top" Icon="tumb" Content="Лента" TextColor="#FF824C" FontSize="14" IconHeight="36" IconWidth="36" IconIndent="-2" IconColor="#FF824C" Grid.Column="0"/>
+                <dx:DXButton ButtonType="ToolButton" Icon="plus" IconHeight="48" IconWidth="48" IconColor="White" Clicked="Button_Clicked" Grid.Column="1"/>
+                <dx:DXButton ButtonType="ToolButton" IconPlacement="Top" Icon="user" Content="Профиль" TextColor="White" FontSize="14" IconHeight="36" IconWidth="36" IconIndent="-2" IconColor="White" Grid.Column="2"/>
+            </Grid>
+        </dx:DXBorder>
+    </Grid>
 
 </ContentPage>
