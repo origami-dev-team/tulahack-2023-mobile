@@ -18,4 +18,6 @@ public class Document {
     [JsonPropertyName("url")] public string? Url { get; set; }
     [JsonPropertyName("likes")] public int Likes { get; set; }
     [JsonPropertyName("preview")] public string? Preview { get; set; }
+
+    [JsonIgnore] public bool IsNotLiked { get; set; } = true;
 }

@@ -1,4 +1,5 @@
 ﻿using DevExpress.Maui.CollectionView;
+using DevExpress.Maui.Core;
 using Origami.Api;
 
 namespace Origami.ComixMaker;
@@ -15,9 +16,6 @@ public partial class MainPage : ContentPage {
 
     protected override async void OnAppearing() {
         base.OnAppearing();
-        if (viewModel.AllDocuments != null)
-            return;
-
         await this.DoSafe(async() => {
             viewModel.AllDocuments = await Repository.GetDocuments();
             if (viewModel.AllDocuments == null)
@@ -46,6 +44,22 @@ public partial class MainPage : ContentPage {
 
         await Navigation.PushAsync(new PdfViewerPage(item.Url));
         ((DXCollectionView)sender).SelectedItem = null;
+    }
+
+    private async void Like_Clicked(object sender, EventArgs e) {
+        if (sender is not DXButton button)
+            return;
+        var item = button.BindingContext as Document;
+        if (item == null || item.Id == null)
+            return;
+
+        button.IsEnabled = false;
+        await this.DoSafe(async() => {
+            var response = await Repository.LikeDocument(item.Id);
+            item.Likes = response?.Likes ?? item.Likes;
+            item.IsNotLiked = false;
+            button.Content = response?.Likes.ToString();
+        });
     }
 }
 

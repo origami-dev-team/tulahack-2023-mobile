@@ -7,6 +7,7 @@
     Shell.FlyoutBehavior="Disabled"
     Shell.BackgroundColor="#191919"
     Shell.ForegroundColor="#FFFFFF"
+    Shell.TitleColor="#FFFFFF"
     Title="Origami.ComixMaker">
 
     <ShellContent Title="Лента"

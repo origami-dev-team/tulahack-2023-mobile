@@ -44,6 +44,11 @@ public static class Repository {
         return await client.GetAsync<List<Document>>(request, cancellationToken);
     }
 
+    public static async Task<Document?> LikeDocument(string id, CancellationToken cancellationToken = default) {
+        var request = new RestRequest($"comics/{id}/like");
+        return await client.PostAsync<Document>(request, cancellationToken);
+    }
+
     public static async Task<Document?> UploadDocument(string title, string author, string filePath, CancellationToken cancellationToken = default) {
         var fileBytes = File.ReadAllBytes(filePath);
         var content = new MultipartFormDataContent();

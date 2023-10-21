@@ -38,14 +38,19 @@
                     </dxcv:DXCollectionView>
                 </VerticalStackLayout>
                 <Label Text="Актуальное" FontSize="18" Margin="16,24" FontAttributes="Bold" TextColor="#191919" />
-                <dxcv:DXCollectionView HeightRequest="450" Orientation="Horizontal" Margin="24,0,0,120" ItemsSource="{Binding AllDocuments}" ItemSpacing="16" SelectionMode="Single" IsScrollBarVisible="False" SelectionChanged="CollectionView_SelectionChanged">
+                <dxcv:DXCollectionView HeightRequest="{OnPlatform Android=450, iOS=510}" Orientation="Horizontal" Margin="24,0,0,120" ItemsSource="{Binding AllDocuments}" ItemSpacing="16" SelectionMode="Single" IsScrollBarVisible="False" SelectionChanged="CollectionView_SelectionChanged">
                     <dxcv:DXCollectionView.ItemTemplate>
                         <DataTemplate>
-                            <dx:DXBorder CornerRadius="20" BackgroundColor="White" MaximumWidthRequest="300">
+                            <dx:DXBorder CornerRadius="20" BackgroundColor="White" MaximumWidthRequest="{OnPlatform Android=300}">
                                 <VerticalStackLayout>
                                     <Image Source="{Binding Preview}"/>
-                                    <Label Text="{Binding Author}" Padding="16,8,16,0" TextColor="#FF824C" FontSize="14"/>
-                                    <Label Text="{Binding Title}" Padding="16,0" LineBreakMode="TailTruncation" FontAttributes="Bold" TextColor="Black" FontSize="18"/>
+                                    <Grid ColumnDefinitions="*,Auto" Padding="16,8" ColumnSpacing="16">
+                                        <VerticalStackLayout Grid.Column="0" >
+                                            <Label Text="{Binding Author}" TextColor="#FF824C" FontSize="14"/>
+                                            <Label Text="{Binding Title}" LineBreakMode="TailTruncation" FontAttributes="Bold" TextColor="Black" FontSize="18"/>
+                                        </VerticalStackLayout>
+                                        <dx:DXButton ButtonType="ToolButton" IsEnabled="{Binding IsNotLiked}" IconPlacement="Top" TextColor="#FF824C" FontSize="13" FontAttributes="None" IconColor="#FF824C" Content="{Binding Likes}" IconIndent="0" Icon="like" IconHeight="30" IconWidth="30" Padding="0" Grid.Column="1" Clicked="Like_Clicked"/>
+                                    </Grid>
                                 </VerticalStackLayout>
                             </dx:DXBorder>
                         </DataTemplate>
@@ -55,7 +60,7 @@
         </ScrollView>
 
          <dx:DXBorder Margin="24,16" CornerRadius="26" VerticalOptions="End">
-            <Grid BackgroundColor="#191919" Padding="4" ColumnDefinitions="*,*,*">
+            <Grid BackgroundColor="#191919" Padding="4" HeightRequest="80" ColumnDefinitions="*,*,*">
                 <dx:DXButton ButtonType="ToolButton" IconPlacement="Top" Icon="tumb" Content="Лента" TextColor="#FF824C" FontSize="14" IconHeight="36" IconWidth="36" IconIndent="-2" IconColor="#FF824C" Grid.Column="0"/>
                 <dx:DXButton ButtonType="ToolButton" Icon="plus" IconHeight="48" IconWidth="48" IconColor="White" Clicked="Button_Clicked" Grid.Column="1"/>
                 <dx:DXButton ButtonType="ToolButton" IconPlacement="Top" Icon="user" Content="Профиль" TextColor="White" FontSize="14" IconHeight="36" IconWidth="36" IconIndent="-2" IconColor="White" Clicked="Button_Clicked2" Grid.Column="2"/>

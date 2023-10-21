@@ -7,8 +7,39 @@
              BackgroundColor="#EBE7E5"
              x:Class="Origami.ComixMaker.ProfilePage">
 
-    <Grid>
-        
-    </Grid>
+    <ScrollView>
+        <VerticalStackLayout>
+            <VerticalStackLayout BackgroundColor="#191919">
+                <Image Source="photo" Margin="0,16" WidthRequest="120" HeightRequest="120">
+                    <Image.Clip>
+                        <EllipseGeometry Center="60,60" RadiusX="60" RadiusY="60"/>
+                    </Image.Clip>
+                </Image>
+                <Label Text="Привет, Гость!" TextColor="White" FontAttributes="Bold" FontSize="22" HorizontalOptions="Center"/>
+                <Grid ColumnDefinitions="*,*" Margin="24,16,24,24" ColumnSpacing="8">
+                    <dx:DXButton Content="Лайки" Icon="love" IconWidth="24" IconHeight="24" TextColor="#191919" Padding="0,16" CornerRadius="20" FontSize="18" BackgroundColor="#FFFFFF" IconColor="#FF824C" ButtonType="Filled" Grid.Column="0"/>
+                    <dx:DXButton Content="Конкурсы" Icon="cup" IconWidth="24" IconHeight="24" TextColor="#191919" Padding="0,16" CornerRadius="20" FontSize="18" BackgroundColor="#FFFFFF" IconColor="#FF824C" ButtonType="Filled"  Grid.Column="1"/>
+                </Grid>
+            </VerticalStackLayout>
+            
+            <Label Text="Ваши комиксы" FontSize="18" Margin="16,24" FontAttributes="Bold" TextColor="#191919" />
+
+            <dxcv:DXCollectionView HeightRequest="{OnPlatform Android=450, iOS=510}" Orientation="Horizontal" Margin="24,0,0,120" ItemsSource="{Binding}" ItemSpacing="16" SelectionMode="Single" IsScrollBarVisible="False" SelectionChanged="CollectionView_SelectionChanged">
+                <dxcv:DXCollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <dx:DXBorder CornerRadius="20" BackgroundColor="White" MaximumWidthRequest="{OnPlatform Android=300}">
+                            <VerticalStackLayout>
+                                <Image Source="{Binding Preview}"/>
+                                <VerticalStackLayout Padding="16,8">
+                                    <Label Text="{Binding Author}" TextColor="#FF824C" FontSize="14"/>
+                                    <Label Text="{Binding Title}" LineBreakMode="TailTruncation" FontAttributes="Bold" TextColor="Black" FontSize="18"/>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </dx:DXBorder>
+                    </DataTemplate>
+                </dxcv:DXCollectionView.ItemTemplate>
+            </dxcv:DXCollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
 
 </ContentPage>

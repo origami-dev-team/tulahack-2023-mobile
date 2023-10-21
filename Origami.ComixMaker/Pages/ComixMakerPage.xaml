@@ -23,7 +23,7 @@
         <dx:DXButton ButtonType="ToolButton" BackgroundColor="#FF824C" CornerRadius="24" Margin="16" Padding="6" IconColor="White" HorizontalOptions="End" VerticalOptions="End" Icon="plus" IconWidth="54" IconHeight="54" Clicked="Button_Clicked"/>
     
         <!-- Main Sheet -->
-        <dxc:BottomSheet State="{Binding CreateFrameBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="48" HalfExpandedRatio="0.78">
+        <dxc:BottomSheet State="{Binding CreateFrameBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="{OnPlatform Android=48, iOS=28}" HalfExpandedRatio="0.78">
             <VerticalStackLayout Margin="24,0" Spacing="16">
                 <Label Text="Создание кадра комикса" TextColor="#2F3441" FontSize="22" FontAttributes="Bold"/>
                 
@@ -51,7 +51,7 @@
         </dxc:BottomSheet>
 
         <!-- Default Picker Sheet -->
-        <dxc:BottomSheet State="{Binding PickerBottomSheetState}" Padding="0" BackgroundColor="#F6F6F6" CornerRadius="48">
+        <dxc:BottomSheet State="{Binding PickerBottomSheetState}" Padding="0" BackgroundColor="#F6F6F6" CornerRadius="{OnPlatform Android=48, iOS=28}">
             <CollectionView x:Name="Picker" SelectionMode="Single" Margin="16" SelectionChanged="CollectionView_SelectionChanged">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="3"/>
@@ -67,7 +67,7 @@
         </dxc:BottomSheet>
 
         <!-- AI Background Sheet -->
-        <dxc:BottomSheet State="{Binding AIBackgroundBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="48" HalfExpandedRatio="0.6">
+        <dxc:BottomSheet State="{Binding AIBackgroundBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="{OnPlatform Android=48, iOS=28}" HalfExpandedRatio="0.6">
             <VerticalStackLayout Margin="24,0" Spacing="16">
                 <Label Text="Введите запрос для генерации фона" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
                 <dxe:MultilineEdit x:Name="AITextField1" PlaceholderColor="#B1B1B1" PlaceholderText="Хижина в лесу" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="60" MaxLineCount="3" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never"/>
@@ -85,7 +85,7 @@
         </dxc:BottomSheet>
 
         <!-- AI Character Sheet -->
-        <dxc:BottomSheet State="{Binding AICharacterBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="48" HalfExpandedRatio="0.6">
+        <dxc:BottomSheet State="{Binding AICharacterBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="{OnPlatform Android=48, iOS=28}" HalfExpandedRatio="0.6">
             <VerticalStackLayout Margin="24,0" Spacing="16">
                 <Label Text="Введите запрос для генерации персонажа" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
                 <dxe:MultilineEdit x:Name="AITextField2" PlaceholderColor="#B1B1B1" PlaceholderText="Девочка в красной шапке" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="60" MaxLineCount="3" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never"/>
@@ -103,7 +103,7 @@
         </dxc:BottomSheet>
 
         <!-- Publish Sheet -->
-        <dxc:BottomSheet State="{Binding PublishBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="48" HalfExpandedRatio="0.4">
+        <dxc:BottomSheet State="{Binding PublishBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="{OnPlatform Android=48, iOS=28}" HalfExpandedRatio="0.4">
             <VerticalStackLayout Margin="24,0" Spacing="16">
                 <Label Text="Введите данные" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
                 <dxe:TextEdit x:Name="AutorTextField" PlaceholderColor="#B1B1B1" PlaceholderText="Автор" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="60" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never"/>
