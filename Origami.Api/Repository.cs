@@ -6,7 +6,7 @@ public static class Repository {
     private static RestClient client;
 
     static Repository() {
-        var options = new RestClientOptions("https://origami-team.site");
+        var options = new RestClientOptions("http://31.129.109.90:3000");
         client = new RestClient(options);
     }
 
@@ -20,11 +20,19 @@ public static class Repository {
         return await client.GetAsync<List<string>>(request, cancellationToken);
     }
 
-    // public static async Task<TodoItem?> CreateTodo(string title, string descr, CancellationToken cancellationToken = default) {
-    //     var request = new RestRequest("todo").AddBody(new TodoCreateItem() {
-    //         Title = title,
-    //         Description = descr
-    //     });
-    //     return await client.PostAsync<TodoItem>(request, cancellationToken);
-    // }
+    public static async Task<List<string>?> GeneratBackgrounds(string query, CancellationToken cancellationToken = default) {
+        var request = new RestRequest("sprite/background").AddBody(new AIGenerateBody() {
+            Prompt = query
+        });
+        request.Timeout = 1000 * 60 * 5;
+        return await client.PostAsync<List<string>?>(request, cancellationToken);
+    }
+
+    public static async Task<List<string>?> GeneratCharacters(string query, CancellationToken cancellationToken = default) {
+        var request = new RestRequest("sprite/character").AddBody(new AIGenerateBody() {
+            Prompt = query
+        });
+        request.Timeout = 1000 * 60 * 5;
+        return await client.PostAsync<List<string>?>(request, cancellationToken);
+    }
 }

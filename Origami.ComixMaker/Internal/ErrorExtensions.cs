@@ -2,11 +2,11 @@
 namespace Origami.ComixMaker;
 
 public static class ErrorExtensions {
-    public static void DoSafe(this Page page, Action action) {
+    public static async Task DoSafe(this Page page, Func<Task> action) {
         try {
-            action();
+            await action();
         } catch (Exception e) {
-            page.DisplayAlert("Exception has been thrown", e.Message, "OK");
+            await page.DisplayAlert("Exception has been thrown", e.Message, "OK");
         }
     }
 }

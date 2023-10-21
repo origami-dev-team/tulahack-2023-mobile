@@ -26,6 +26,24 @@ public class ComixMakerViewModel : INotifyPropertyChanged {
         }
     }
 
+    private BottomSheetState aiBackgroundBottomSheetState = BottomSheetState.Hidden;
+    public BottomSheetState AIBackgroundBottomSheetState {
+        get => aiBackgroundBottomSheetState;
+        set {
+            aiBackgroundBottomSheetState = value;
+            OnPropertyChanged(nameof(AIBackgroundBottomSheetState));
+        }
+    }
+
+    private BottomSheetState aiCharacterBottomSheetState = BottomSheetState.Hidden;
+    public BottomSheetState AICharacterBottomSheetState {
+        get => aiCharacterBottomSheetState;
+        set {
+            aiCharacterBottomSheetState = value;
+            OnPropertyChanged(nameof(AICharacterBottomSheetState));
+        }
+    }
+
     private BottomSheetState pickerBottomSheetState = BottomSheetState.Hidden;
     public BottomSheetState PickerBottomSheetState {
         get => pickerBottomSheetState;

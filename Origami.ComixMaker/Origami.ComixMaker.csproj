@@ -9,10 +9,10 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>Origami.ComixMaker</ApplicationTitle>
+		<ApplicationTitle>Comigami</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.origami.comixmaker</ApplicationId>
+		<ApplicationId>ru.origami.comigami</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>

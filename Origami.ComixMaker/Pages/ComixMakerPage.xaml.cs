@@ -1,4 +1,5 @@
 ﻿using DevExpress.Maui.Controls;
+using DevExpress.Maui.Core;
 using DevExpress.Maui.Editors;
 using Origami.Api;
 
@@ -19,9 +20,9 @@ public partial class ComixMakerPage : ContentPage {
         BindingContext = viewModel;
     }
 
-    protected override void OnAppearing() {
+    protected override async void OnAppearing() {
         base.OnAppearing();
-        this.DoSafe(async() => {
+        await this.DoSafe(async() => {
             viewModel.PredefinedCharacters = await Repository.GetAllCharacters();
             viewModel.PredefinedBackgrounds = await Repository.GetAllBackgrounds();
         });
@@ -76,6 +77,14 @@ public partial class ComixMakerPage : ContentPage {
         viewModel.ResetState();
     }
 
+    private void AICharacter_Clicked(object sender, EventArgs e) {
+        viewModel.AICharacterBottomSheetState = BottomSheetState.HalfExpanded;
+    }
+
+    private void AIBackground_Clicked(object sender, EventArgs e) {
+        viewModel.AIBackgroundBottomSheetState = BottomSheetState.HalfExpanded;
+    }
+
     private void CollectionView_SelectionChanged(object? sender, SelectionChangedEventArgs e) {
         var item = e.CurrentSelection.FirstOrDefault();
         if (item == null)
@@ -92,10 +101,29 @@ public partial class ComixMakerPage : ContentPage {
     }
 
     private async void Generate_Clicked(object sender, EventArgs e) {
+        var button = (DXButton)sender;
+        button.IsEnabled = false;
         viewModel.CleanGeneratedDocuments();
         await viewModel.GenerateComix();
         TextField.Text = string.Empty;
         viewModel.CreateFrameBottomSheetState = BottomSheetState.Hidden;
+        button.IsEnabled = true;
+    }
+
+    private async void AIBGenerate_Clicked(object sender, EventArgs e) {
+        var button = (DXButton)sender;
+        button.IsEnabled = false;
+        button.Content = "Generating...";
+        await this.DoSafe(async () => {
+            if (string.IsNullOrEmpty(AITextField1.Text))
+                throw new Exception("Text is empty");
+
+            var items = await Repository.GeneratBackgrounds(AITextField1.Text);
+            AIBackgroundView.ItemsSource = items;
+        });
+
+        button.IsEnabled = true;
+        button.Content = "Создать фон";
     }
 
     private enum PickerType {

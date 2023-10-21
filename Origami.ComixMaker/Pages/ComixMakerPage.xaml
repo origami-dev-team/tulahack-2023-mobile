@@ -5,6 +5,7 @@
              xmlns:dxpdf="clr-namespace:DevExpress.Maui.Pdf;assembly=DevExpress.Maui.Pdf"
              xmlns:dxc="clr-namespace:DevExpress.Maui.Controls;assembly=DevExpress.Maui.Controls"
              xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
+             xmlns:dxcv="clr-namespace:DevExpress.Maui.CollectionView;assembly=DevExpress.Maui.CollectionView"
              Title="Комикс"
              BackgroundColor="#DEDEDE"
              x:Class="Origami.ComixMaker.ComixMakerPage">
@@ -18,10 +19,9 @@
         <dxpdf:PdfViewer x:Name="pdfViewer" MaxZoomFactor="1" MinZoomFactor="1" DocumentSource="{Binding DocumentSource}"/>
 
         <!-- Bottom bar -->
-        <dx:DXButton ButtonType="ToolButton" BackgroundColor="White" CornerRadius="60" Margin="16" IconColor="#E8713F" HorizontalOptions="End" VerticalOptions="End" Icon="plus" IconWidth="54" IconHeight="54" Clicked="Button_Clicked"/>
+        <dx:DXButton ButtonType="ToolButton" BackgroundColor="#E8713F" CornerRadius="24" Margin="16" Padding="6" IconColor="White" HorizontalOptions="End" VerticalOptions="End" Icon="plus" IconWidth="54" IconHeight="54" Clicked="Button_Clicked"/>
     
-
-        <!-- Sheet -->
+        <!-- Main Sheet -->
         <dxc:BottomSheet State="{Binding CreateFrameBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="48" HalfExpandedRatio="0.78">
             <VerticalStackLayout Margin="24,0" Spacing="16">
                 <Label Text="Создание кадра комикса" TextColor="#2F3441" FontSize="22" FontAttributes="Bold"/>
@@ -30,13 +30,13 @@
                 <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
                     <dx:DXButton IsEnabled="{Binding IsBackgroundPickedInv}" Icon="images" IconColor="#EBDFDF" Content="Из галереи" Padding="0,4" IconPlacement="Top" IconIndent="-2" TextColor="#737373" IconWidth="100" IconHeight="100" CornerRadius="12" BackgroundColor="White" Grid.Column="0" Clicked="Photo_Gallery"/>
                     <dx:DXButton IsEnabled="{Binding IsBackgroundPickedInv}" Icon="cards" IconColor="#E8713F" Content="Готовые" Padding="0,4" IconPlacement="Top" IconIndent="-2" TextColor="#737373" IconWidth="100" IconHeight="100" CornerRadius="12" BackgroundColor="White" Clicked="Prefedined_Clicked2" Grid.Column="1"/>
-                    <dx:DXButton IsEnabled="{Binding IsBackgroundPickedInv}" Icon="file_ai" IconColor="#E8713F" Content="Созданные ИИ" Padding="0,4" IconPlacement="Top" IconIndent="-2" TextColor="#737373" IconWidth="100" IconHeight="100" CornerRadius="12" BackgroundColor="White" Grid.Column="2"/>
+                    <dx:DXButton IsEnabled="{Binding IsBackgroundPickedInv}" Icon="file_ai" IconColor="#E8713F" Content="Созданные ИИ" Padding="0,4" IconPlacement="Top" IconIndent="-2" TextColor="#737373" IconWidth="100" IconHeight="100" CornerRadius="12" BackgroundColor="White" Clicked="AIBackground_Clicked" Grid.Column="2"/>
                 </Grid>
 
                 <Label Text="Выбор персонажа" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
-                    <dx:DXButton IsEnabled="{Binding IsCharacterPickedInv}" Icon="user_ai" IconColor="#E8713F" Content="Созданные ИИ" Padding="0,16" IconIndent="0" TextColor="#737373" IconWidth="50" IconHeight="50" CornerRadius="12" BackgroundColor="White" Grid.Column="0"/>
-                    <dx:DXButton IsEnabled="{Binding IsCharacterPickedInv}" Icon="users" IconColor="#E8713F" Content="Готовые" Padding="0,16" TextColor="#737373" IconWidth="50" IconHeight="50" CornerRadius="12" BackgroundColor="White" Clicked="Prefedined_Clicked" Grid.Column="1"/>
+                    <dx:DXButton IsEnabled="{Binding IsCharacterPickedInv}" Icon="ai_user" IconColor="#E8713F" Content="Созданные ИИ" Padding="0,16" IconIndent="0" TextColor="#737373" IconWidth="50" IconHeight="50" CornerRadius="12" BackgroundColor="White" Clicked="AICharacter_Clicked" Grid.Column="1"/>
+                    <dx:DXButton IsEnabled="{Binding IsCharacterPickedInv}" Icon="users" IconColor="#E8713F" Content="Готовые" Padding="0,16" TextColor="#737373" IconWidth="50" IconHeight="50" CornerRadius="12" BackgroundColor="White" Clicked="Prefedined_Clicked" Grid.Column="0"/>
                 </Grid>
 
                 <Label Text="Ввод текста для кадра" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
@@ -49,18 +49,43 @@
             </VerticalStackLayout>
         </dxc:BottomSheet>
 
-        <!-- Sheet -->
-        <dxc:BottomSheet State="{Binding PickerBottomSheetState}">
-            <CollectionView x:Name="Picker" SelectionMode="Single" SelectionChanged="CollectionView_SelectionChanged">
+        <!-- Default Picker Sheet -->
+        <dxc:BottomSheet State="{Binding PickerBottomSheetState}" Padding="0" BackgroundColor="#F6F6F6" CornerRadius="48">
+            <CollectionView x:Name="Picker" SelectionMode="Single" Margin="16" SelectionChanged="CollectionView_SelectionChanged">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="3"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Image Source="{Binding}" Aspect="AspectFill" HeightRequest="120"/>
+                        <dx:DXBorder BackgroundColor="White" Margin="4" CornerRadius="12">
+                            <Image Source="{Binding}" Aspect="Center" HeightRequest="120"/>
+                        </dx:DXBorder>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+        </dxc:BottomSheet>
+
+        <!-- AI Background Sheet -->
+        <dxc:BottomSheet State="{Binding AIBackgroundBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="48" HalfExpandedRatio="0.6">
+            <VerticalStackLayout Margin="24,0" Spacing="16">
+                <Label Text="Введите запрос для генерации фона" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
+                <dxe:MultilineEdit x:Name="AITextField1" PlaceholderText="Хижина в лесу" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="60" MaxLineCount="3" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never"/>
+                <dx:DXButton Content="Создать фон" CornerRadius="12" Margin="24,0" Padding="0,16" BackgroundColor="#E8713F" Clicked="AIBGenerate_Clicked"/>
+                <dxcv:DXCollectionView x:Name="AIBackgroundView" BackgroundColor="Transparent" HeightRequest="200" Orientation="Horizontal" SelectionMode="Single">
+                    <dxcv:DXCollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <dx:DXBorder BackgroundColor="White" Margin="4" HeightRequest="175" CornerRadius="12">
+                                <Image Source="{Binding}" Aspect="Center" />
+                            </dx:DXBorder>
+                        </DataTemplate>
+                    </dxcv:DXCollectionView.ItemTemplate>
+                </dxcv:DXCollectionView>
+            </VerticalStackLayout>
+        </dxc:BottomSheet>
+
+        <!-- AI Character Sheet -->
+        <dxc:BottomSheet State="{Binding AICharacterBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="48" HalfExpandedRatio="0.6">
+            
         </dxc:BottomSheet>
     </Grid>
 
