@@ -20,7 +20,7 @@
         <dxpdf:PdfViewer x:Name="pdfViewer" MaxZoomFactor="1" MinZoomFactor="1" DocumentSource="{Binding DocumentSource}"/>
 
         <!-- Bottom bar -->
-        <dx:DXButton ButtonType="ToolButton" BackgroundColor="#E8713F" CornerRadius="24" Margin="16" Padding="6" IconColor="White" HorizontalOptions="End" VerticalOptions="End" Icon="plus" IconWidth="54" IconHeight="54" Clicked="Button_Clicked"/>
+        <dx:DXButton ButtonType="ToolButton" BackgroundColor="#FF824C" CornerRadius="24" Margin="16" Padding="6" IconColor="White" HorizontalOptions="End" VerticalOptions="End" Icon="plus" IconWidth="54" IconHeight="54" Clicked="Button_Clicked"/>
     
         <!-- Main Sheet -->
         <dxc:BottomSheet State="{Binding CreateFrameBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="48" HalfExpandedRatio="0.78">
@@ -45,7 +45,7 @@
 
                 <Grid ColumnDefinitions="*,2*" Margin="24,0" ColumnSpacing="16">
                     <dx:DXButton Content="Сбросить"  CornerRadius="12" Padding="0,16" BackgroundColor="White" TextColor="#2F3441" Grid.Column="0" Clicked="Reset_Clicked"/>
-                    <dx:DXButton Content="Сгенерировать" CornerRadius="12" Padding="0,16" BackgroundColor="#E8713F" Clicked="Generate_Clicked" Grid.Column="1"/>
+                    <dx:DXButton Content="Сгенерировать" CornerRadius="12" Padding="0,16" BackgroundColor="#FF824C" Clicked="Generate_Clicked" Grid.Column="1"/>
                 </Grid>
             </VerticalStackLayout>
         </dxc:BottomSheet>
@@ -71,7 +71,7 @@
             <VerticalStackLayout Margin="24,0" Spacing="16">
                 <Label Text="Введите запрос для генерации фона" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
                 <dxe:MultilineEdit x:Name="AITextField1" PlaceholderColor="#B1B1B1" PlaceholderText="Хижина в лесу" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="60" MaxLineCount="3" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never"/>
-                <dx:DXButton Content="Создать фон" CornerRadius="12" Margin="24,0" Padding="0,16" BackgroundColor="#E8713F" Clicked="AIBGenerate_Clicked"/>
+                <dx:DXButton Content="Создать фон" CornerRadius="12" Margin="24,0" Padding="0,16" BackgroundColor="#FF824C" Clicked="AIBGenerate_Clicked"/>
                 <dxcv:DXCollectionView x:Name="AIBackgroundView" BackgroundColor="Transparent" HeightRequest="200" Orientation="Horizontal" SelectionMode="Single" SelectionChanged="AIBackgroundView_SelectionChanged">
                     <dxcv:DXCollectionView.ItemTemplate>
                         <DataTemplate>
@@ -89,7 +89,7 @@
             <VerticalStackLayout Margin="24,0" Spacing="16">
                 <Label Text="Введите запрос для генерации персонажа" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
                 <dxe:MultilineEdit x:Name="AITextField2" PlaceholderColor="#B1B1B1" PlaceholderText="Девочка в красной шапке" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="60" MaxLineCount="3" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never"/>
-                <dx:DXButton Content="Создать персонажа" CornerRadius="12" Margin="24,0" Padding="0,16" BackgroundColor="#E8713F" Clicked="AICGenerate_Clicked"/>
+                <dx:DXButton Content="Создать персонажа" CornerRadius="12" Margin="24,0" Padding="0,16" BackgroundColor="#FF824C" Clicked="AICGenerate_Clicked"/>
                 <dxcv:DXCollectionView x:Name="AICharacterView" BackgroundColor="Transparent" HeightRequest="200" Orientation="Horizontal" SelectionMode="Single" SelectionChanged="AICharacterView_SelectionChanged">
                     <dxcv:DXCollectionView.ItemTemplate>
                         <DataTemplate>
@@ -105,9 +105,10 @@
         <!-- Publish Sheet -->
         <dxc:BottomSheet State="{Binding PublishBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="48" HalfExpandedRatio="0.4">
             <VerticalStackLayout Margin="24,0" Spacing="16">
-                <Label Text="Публикация" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
-                <!-- <dxe:MultilineEdit x:Name="AITextField2" PlaceholderColor="#B1B1B1" PlaceholderText="Девочка в красной шапке" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="60" MaxLineCount="3" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never"/> -->
-                <dx:DXButton Content="Test button" CornerRadius="12" Margin="24,0" Padding="0,16" BackgroundColor="#E8713F" Clicked="AICGenerate_Clicked"/>
+                <Label Text="Введите данные" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
+                <dxe:TextEdit x:Name="AutorTextField" PlaceholderColor="#B1B1B1" PlaceholderText="Автор" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="60" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never"/>
+                <dxe:TextEdit x:Name="TitleTextField" PlaceholderColor="#B1B1B1" PlaceholderText="Заголовок" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="60" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never"/>
+                <dx:DXButton Content="Опубликовать" CornerRadius="12" Margin="24,0" Padding="0,16" BackgroundColor="#FF824C" Clicked="PublishFile_Clicked"/>
             </VerticalStackLayout>
         </dxc:BottomSheet>
     </Grid>

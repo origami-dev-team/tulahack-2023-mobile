@@ -4,11 +4,55 @@
              xmlns:dx="clr-namespace:DevExpress.Maui.Core;assembly=DevExpress.Maui.Core"
              xmlns:dxcv="clr-namespace:DevExpress.Maui.CollectionView;assembly=DevExpress.Maui.CollectionView"
              Title="Лента"
-             
+             BackgroundColor="#EBE7E5"
              x:Class="Origami.ComixMaker.MainPage">
 
     <Grid>
-        <dxcv:DXCollectionView BackgroundColor="#EBE7E5"/>
+        <ScrollView>
+            <VerticalStackLayout>
+                <VerticalStackLayout BackgroundColor="#191919">
+                    <Grid Margin="24,8,60,32">
+                        <BoxView HeightRequest="30" Color="#FF824C" Rotation="-5.19"/>
+                        <Label Text="Комиксы дня!" TextColor="White" FontAttributes="Bold" FontSize="40"/>
+                    </Grid>
+                    <dxcv:DXCollectionView HeightRequest="240" Orientation="Horizontal" Margin="24,0,0,24" ItemsSource="{Binding TopDocuments}" ItemSpacing="16" SelectionMode="Single" SelectionChanged="CollectionView_SelectionChanged">
+                        <dxcv:DXCollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <dx:DXBorder CornerRadius="20" MaximumWidthRequest="186">
+                                    <Grid>
+                                        <Image Source="{Binding Preview}"/>
+                                        <Label Text="{Binding Title}" Padding="16,48,16,16" FontAttributes="Bold" VerticalOptions="End" TextColor="White" FontSize="18">
+                                            <Label.Background>
+                                                <LinearGradientBrush EndPoint="0,1">
+                                                    <GradientStop Color="Transparent"
+                                                                Offset="0.1" />
+                                                    <GradientStop Color="##333232"
+                                                                Offset="1.0" />
+                                                </LinearGradientBrush>
+                                            </Label.Background>
+                                        </Label>
+                                    </Grid>
+                                </dx:DXBorder>
+                            </DataTemplate>
+                        </dxcv:DXCollectionView.ItemTemplate>
+                    </dxcv:DXCollectionView>
+                </VerticalStackLayout>
+                <Label Text="Актуальное" FontSize="18" Margin="16,24" FontAttributes="Bold" TextColor="#191919" />
+                <dxcv:DXCollectionView HeightRequest="450" Orientation="Horizontal" Margin="24,0,0,120" ItemsSource="{Binding AllDocuments}" ItemSpacing="16" SelectionMode="Single" IsScrollBarVisible="False" SelectionChanged="CollectionView_SelectionChanged">
+                    <dxcv:DXCollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <dx:DXBorder CornerRadius="20" BackgroundColor="White" MaximumWidthRequest="300">
+                                <VerticalStackLayout>
+                                    <Image Source="{Binding Preview}"/>
+                                    <Label Text="{Binding Author}" Padding="16,8,16,0" TextColor="#FF824C" FontSize="14"/>
+                                    <Label Text="{Binding Title}" Padding="16,0" LineBreakMode="TailTruncation" FontAttributes="Bold" TextColor="Black" FontSize="18"/>
+                                </VerticalStackLayout>
+                            </dx:DXBorder>
+                        </DataTemplate>
+                    </dxcv:DXCollectionView.ItemTemplate>
+                </dxcv:DXCollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
 
          <dx:DXBorder Margin="24,16" CornerRadius="26" VerticalOptions="End">
             <Grid BackgroundColor="#191919" Padding="4" ColumnDefinitions="*,*,*">

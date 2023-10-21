@@ -27,6 +27,9 @@ public partial class ComixMakerPage : ContentPage {
             viewModel.PredefinedCharacters = await Repository.GetAllCharacters();
             viewModel.PredefinedBackgrounds = await Repository.GetAllBackgrounds();
         });
+
+        if (viewModel.DocumentSource == null)
+            viewModel.CreateFrameBottomSheetState = BottomSheetState.HalfExpanded;
     }
 
     private async void Share_Clicked(object sender, EventArgs e) {
@@ -84,12 +87,16 @@ public partial class ComixMakerPage : ContentPage {
     private void AIBackground_Clicked(object sender, EventArgs e) {
         viewModel.AIBackgroundBottomSheetState = BottomSheetState.HalfExpanded;
     }
-    private void Publish_Clicked(object sender, EventArgs e) {
+    private async void Publish_Clicked(object sender, EventArgs e) {
+        if (viewModel.DocumentSource == null) {
+            await DisplayAlert("Error", "Document is not generated", "OK");
+            return;
+        }
         viewModel.PublishBottomSheetState = BottomSheetState.HalfExpanded;
     }
 
 
-    private void CollectionView_SelectionChanged(object? sender, SelectionChangedEventArgs e) {
+    private void CollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
         var item = e.CurrentSelection.FirstOrDefault();
         if (item == null)
             return;
@@ -102,9 +109,10 @@ public partial class ComixMakerPage : ContentPage {
             viewModel.IsBackgroundPickedInv = false;
         }
         viewModel.PickerBottomSheetState = BottomSheetState.Hidden;
+        ((CollectionView)sender).SelectedItem = null;
     }
 
-    private void AIBackgroundView_SelectionChanged(object? sender, CollectionViewSelectionChangedEventArgs e) {
+    private void AIBackgroundView_SelectionChanged(object sender, CollectionViewSelectionChangedEventArgs e) {
         var item = e.AddedItems.FirstOrDefault();
         if (item == null)
             return;
@@ -112,8 +120,9 @@ public partial class ComixMakerPage : ContentPage {
         viewModel.FramesData.Last().BackgroundImagePath = (string)item;
         viewModel.IsBackgroundPickedInv = false;
         viewModel.AIBackgroundBottomSheetState = BottomSheetState.Hidden;
+        ((DXCollectionView)sender).SelectedItem = null;
     }
-    private void AICharacterView_SelectionChanged(object? sender, CollectionViewSelectionChangedEventArgs e) {
+    private void AICharacterView_SelectionChanged(object sender, CollectionViewSelectionChangedEventArgs e) {
         var item = e.AddedItems.FirstOrDefault();
         if (item == null)
             return;
@@ -121,6 +130,7 @@ public partial class ComixMakerPage : ContentPage {
         viewModel.FramesData.Last().PersonImagePath = (string)item;
         viewModel.IsCharacterPickedInv = false;
         viewModel.AICharacterBottomSheetState = BottomSheetState.Hidden;
+        ((DXCollectionView)sender).SelectedItem = null;
     }
 
     private async void Generate_Clicked(object sender, EventArgs e) {
@@ -163,6 +173,21 @@ public partial class ComixMakerPage : ContentPage {
 
         button.IsEnabled = true;
         button.Content = "Создать персонажа";
+    }
+    private async void PublishFile_Clicked(object sender, EventArgs e) {
+        var button = (DXButton)sender;
+        button.IsEnabled = false;
+        button.Content = "Публикация...";
+        await this.DoSafe(async () => {
+            if (string.IsNullOrEmpty(AutorTextField.Text) || string.IsNullOrEmpty(TitleTextField.Text))
+                throw new Exception("Incorrect text");
+
+            _ = await Repository.UploadDocument(TitleTextField.Text, AutorTextField.Text, viewModel.DocumentSource!);
+        });
+
+        button.IsEnabled = true;
+        button.Content = "Опубликовать";
+        viewModel.PublishBottomSheetState = BottomSheetState.Hidden;
     }
 
     private enum PickerType {
