@@ -11,7 +11,7 @@ namespace Origami.ComixMaker;
 public class ComixMakerViewModel : INotifyPropertyChanged {
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private const string DocumentGeneratedName = "stashpdf.pdf";
+    private const string DocumentGeneratedName = "autostashfile";
     private Rect pageViewPort;
 
     private BottomSheetState createFrameBottomSheetState = BottomSheetState.Hidden;

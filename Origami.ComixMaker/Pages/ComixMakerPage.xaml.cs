@@ -14,6 +14,17 @@ public partial class ComixMakerPage : ContentPage {
         BindingContext = viewModel;
     }
 
+    private async void Share_Clicked(object sender, EventArgs e) {
+        if (viewModel.DocumentSource == null) {
+            await DisplayAlert("Error", "Document is not generated", "OK");
+            return;
+        }
+        await Share.Default.RequestAsync(new ShareFileRequest {
+            Title = "Share pdf file",
+            File = new ShareFile(viewModel.DocumentSource)
+        });
+    }
+
     private void Button_Clicked(object sender, EventArgs e) {
         viewModel.CreateFrameBottomSheetState = BottomSheetState.HalfExpanded;
         var test = new MultilineEdit();
@@ -27,7 +38,7 @@ public partial class ComixMakerPage : ContentPage {
         viewModel.FramesData.Last().Text = text;
     }
 
-    private async void Button_Clicked3(object sender, EventArgs e) {
+    private async void Photo_Gallery(object sender, EventArgs e) {
         var result = await MediaPicker.PickPhotoAsync();
         if (result == null)
             return;
@@ -38,5 +49,7 @@ public partial class ComixMakerPage : ContentPage {
     private async void Button_Clicked2(object sender, EventArgs e) {
         viewModel.CleanGeneratedDocuments();
         await viewModel.GenerateComix();
+        TextField.Text = string.Empty;
+        viewModel.CreateFrameBottomSheetState = BottomSheetState.Hidden;
     }
 }
