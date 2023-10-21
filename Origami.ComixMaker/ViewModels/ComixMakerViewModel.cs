@@ -11,7 +11,10 @@ namespace Origami.ComixMaker;
 public class ComixMakerViewModel : INotifyPropertyChanged {
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    public Action<string>? ProblemHandler { get; set; }
+
     private const string DocumentGeneratedName = "autostashfile";
+    private const string FontFamilyName = "Comic Sans";
     private Rect pageViewPort;
 
     private BottomSheetState createFrameBottomSheetState = BottomSheetState.Hidden;
@@ -23,12 +26,30 @@ public class ComixMakerViewModel : INotifyPropertyChanged {
         }
     }
 
-    private BottomSheetState characterPickerBottomSheetState = BottomSheetState.Hidden;
-    public BottomSheetState CharacterPickerBottomSheetState {
-        get => characterPickerBottomSheetState;
+    private BottomSheetState pickerBottomSheetState = BottomSheetState.Hidden;
+    public BottomSheetState PickerBottomSheetState {
+        get => pickerBottomSheetState;
         set {
-            characterPickerBottomSheetState = value;
-            OnPropertyChanged(nameof(CharacterPickerBottomSheetState));
+            pickerBottomSheetState = value;
+            OnPropertyChanged(nameof(PickerBottomSheetState));
+        }
+    }
+
+    private bool isBackgroundPickedInv = true;
+    public bool IsBackgroundPickedInv {
+        get => isBackgroundPickedInv;
+        set {
+            isBackgroundPickedInv = value;
+            OnPropertyChanged(nameof(IsBackgroundPickedInv));
+        }
+    }
+
+    private bool isCharacterPickedInv = true;
+    public bool IsCharacterPickedInv {
+        get => isCharacterPickedInv;
+        set {
+            isCharacterPickedInv = value;
+            OnPropertyChanged(nameof(IsCharacterPickedInv));
         }
     }
 
@@ -38,6 +59,15 @@ public class ComixMakerViewModel : INotifyPropertyChanged {
         set {
             predefinedCharacters = value;
             OnPropertyChanged(nameof(PredefinedCharacters));
+        }
+    }
+
+    private List<string>? predefinedBackgrounds = null;
+    public List<string>? PredefinedBackgrounds {
+        get => predefinedBackgrounds;
+        set {
+            predefinedBackgrounds = value;
+            OnPropertyChanged(nameof(PredefinedBackgrounds));
         }
     }
 
@@ -72,7 +102,8 @@ public class ComixMakerViewModel : INotifyPropertyChanged {
             processor.CreateEmptyDocument();
             foreach (var frameData in FramesData) {
                 using (PdfGraphics graph = processor.CreateGraphics()) {
-                    await DrawBackgroundImage(graph, frameData);
+                    await DrawImage(graph, frameData.BackgroundImagePath);
+                    await DrawImage(graph, frameData.PersonImagePath);
                     DrawText(graph, frameData);
                     processor.RenderNewPage(PdfPaperSize.Letter, graph);
                 }
@@ -87,15 +118,30 @@ public class ComixMakerViewModel : INotifyPropertyChanged {
 
         DocumentSource = path;
         FramesData.Add(new ComixFrameBuilder());
+        ResetState();
     }
 
-    private async Task DrawBackgroundImage(PdfGraphics graph, ComixFrameBuilder frameData) {
-        if (string.IsNullOrEmpty(frameData.BackgroundImagePath))
+    public void ResetState() {
+        FramesData.Last().PersonImagePath = string.Empty;
+        FramesData.Last().BackgroundImagePath = string.Empty;
+        FramesData.Last().Text = string.Empty;
+        IsBackgroundPickedInv = true;
+        IsCharacterPickedInv = true;
+    }
+
+    private async Task DrawImage(PdfGraphics graph, string imagePath) {
+        if (string.IsNullOrEmpty(imagePath))
             return;
 
-        using var stream = frameData.BackgroundImagePath.StartsWith("http")
-            ? await GetStreamFromUrl(frameData.BackgroundImagePath)
-            : new FileStream(frameData.BackgroundImagePath, FileMode.Open, FileAccess.Read);
+        using var stream = imagePath.StartsWith("http")
+            ? await GetStreamFromUrl(imagePath)
+            : new FileStream(imagePath, FileMode.Open, FileAccess.Read);
+
+        if (stream is FileStream && (
+                Path.GetExtension(imagePath) == ".jpg" ||
+                Path.GetExtension(imagePath) == ".jpeg")
+        )
+            ProblemHandler?.Invoke("В данный момент jpeg файлы не обтображаются во встроенном предпросмотре. Мы можете открыть сгенерированный файл в любом pdf ридере.");
 
         using var image = DXImage.FromStream(stream);
         var pageCenter = new RectangleF(0, 0, (float)pageViewPort.Width, (float)pageViewPort.Height);
@@ -106,13 +152,13 @@ public class ComixMakerViewModel : INotifyPropertyChanged {
             return;
 
         using var whiteBrush = new DXSolidBrush(Color.White);
-        var font = new DevExpress.Drawing.DXFont("Times New Roman", 32, DXFontStyle.Bold);
+        var font = new DevExpress.Drawing.DXFont(FontFamilyName, 24, DXFontStyle.Bold);
 
         const float textMargin = 16f;
         var textPopupFrame = new RectangleF(0, (float)pageViewPort.Height * 0.8f, (float)pageViewPort.Width, (float)pageViewPort.Height * 0.2f);
         var textFrame = new RectangleF(textPopupFrame.Left + textMargin, textPopupFrame.Top + textMargin, textPopupFrame.Width - textMargin * 2, textPopupFrame.Height - textMargin * 2);
 
-        graph.FillRectangle(new DXSolidBrush(Color.Black), textPopupFrame);
+        graph.FillRectangle(new DXSolidBrush(Color.FromArgb(150, Color.Black)), textPopupFrame);
         graph.DrawString(frameData.Text, font, whiteBrush, textFrame);
     }
 

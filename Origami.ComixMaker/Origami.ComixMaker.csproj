@@ -22,6 +22,14 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net8.0-android'">
+		<AndroidKeyStore>True</AndroidKeyStore>
+		<AndroidSigningKeyStore>../origami_universal.jks</AndroidSigningKeyStore>
+		<AndroidSigningStorePass>*****</AndroidSigningStorePass>
+		<AndroidSigningKeyAlias>origami_key_alias</AndroidSigningKeyAlias>
+		<AndroidSigningKeyPass>*****</AndroidSigningKeyPass>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />

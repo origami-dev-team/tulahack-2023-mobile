@@ -6,10 +6,14 @@ namespace Origami.ComixMaker;
 
 public partial class ComixMakerPage : ContentPage {
     private ComixMakerViewModel viewModel;
+    private PickerType pickerType;
     
 
     public ComixMakerPage() {
         viewModel = new ComixMakerViewModel();
+        viewModel.ProblemHandler = async (message) => {
+            await DisplayAlert("Warning", message, "OK");
+        };
     
         InitializeComponent();
         BindingContext = viewModel;
@@ -19,6 +23,7 @@ public partial class ComixMakerPage : ContentPage {
         base.OnAppearing();
         this.DoSafe(async() => {
             viewModel.PredefinedCharacters = await Repository.GetAllCharacters();
+            viewModel.PredefinedBackgrounds = await Repository.GetAllBackgrounds();
         });
     }
 
@@ -51,10 +56,24 @@ public partial class ComixMakerPage : ContentPage {
             return;
 
         viewModel.FramesData.Last().BackgroundImagePath = result.FullPath;
+        viewModel.IsBackgroundPickedInv = false;
     }
 
     private void Prefedined_Clicked(object sender, EventArgs e) {
-        viewModel.CharacterPickerBottomSheetState = BottomSheetState.HalfExpanded;
+        pickerType = PickerType.Character;
+        Picker.ItemsSource = viewModel.PredefinedCharacters;
+        viewModel.PickerBottomSheetState = BottomSheetState.HalfExpanded;
+    }
+
+    private void Prefedined_Clicked2(object sender, EventArgs e) {
+        pickerType = PickerType.Background;
+        Picker.ItemsSource = viewModel.PredefinedBackgrounds;
+        viewModel.PickerBottomSheetState = BottomSheetState.HalfExpanded;
+    }
+
+    private void Reset_Clicked(object sender, EventArgs e) {
+        TextField.Text = string.Empty;
+        viewModel.ResetState();
     }
 
     private void CollectionView_SelectionChanged(object? sender, SelectionChangedEventArgs e) {
@@ -62,8 +81,14 @@ public partial class ComixMakerPage : ContentPage {
         if (item == null)
             return;
 
-        viewModel.FramesData.Last().BackgroundImagePath = (string)item;
-        viewModel.CharacterPickerBottomSheetState = BottomSheetState.Hidden;
+        if (pickerType == PickerType.Character) {
+            viewModel.FramesData.Last().PersonImagePath = (string)item;
+            viewModel.IsCharacterPickedInv = false;
+        } else {
+            viewModel.FramesData.Last().BackgroundImagePath = (string)item;
+            viewModel.IsBackgroundPickedInv = false;
+        }
+        viewModel.PickerBottomSheetState = BottomSheetState.Hidden;
     }
 
     private async void Generate_Clicked(object sender, EventArgs e) {
@@ -71,5 +96,10 @@ public partial class ComixMakerPage : ContentPage {
         await viewModel.GenerateComix();
         TextField.Text = string.Empty;
         viewModel.CreateFrameBottomSheetState = BottomSheetState.Hidden;
+    }
+
+    private enum PickerType {
+        Character,
+        Background
     }
 }

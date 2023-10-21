@@ -6,6 +6,7 @@
              xmlns:dxc="clr-namespace:DevExpress.Maui.Controls;assembly=DevExpress.Maui.Controls"
              xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
              Title="Комикс"
+             BackgroundColor="#DEDEDE"
              x:Class="Origami.ComixMaker.ComixMakerPage">
 
     <ContentPage.ToolbarItems>
@@ -17,10 +18,8 @@
         <dxpdf:PdfViewer x:Name="pdfViewer" MaxZoomFactor="1" MinZoomFactor="1" DocumentSource="{Binding DocumentSource}"/>
 
         <!-- Bottom bar -->
-        <VerticalStackLayout VerticalOptions="End" Margin="16,12" Spacing="4">
-            <dx:DXButton ButtonType="Outlined" BackgroundColor="#DEDEDE" BorderThickness="3" BorderColor="White" IconColor="White" Icon="plus" CornerRadius="20" IconWidth="54" IconHeight="54" Clicked="Button_Clicked"/>
-            <Label Text="Чтобы добавить новую часть комикса, нажмите плюс еще раз" TextColor="#9B9B9B" HorizontalTextAlignment="Center" Margin="8,0" HorizontalOptions="Center"/>
-        </VerticalStackLayout>
+        <dx:DXButton ButtonType="ToolButton" BackgroundColor="White" CornerRadius="60" Margin="16" IconColor="#E8713F" HorizontalOptions="End" VerticalOptions="End" Icon="plus" IconWidth="54" IconHeight="54" Clicked="Button_Clicked"/>
+    
 
         <!-- Sheet -->
         <dxc:BottomSheet State="{Binding CreateFrameBottomSheetState}" BackgroundColor="#F6F6F6" CornerRadius="48" HalfExpandedRatio="0.78">
@@ -29,27 +28,30 @@
                 
                 <Label Text="Выбор фона" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
                 <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
-                    <dx:DXButton Icon="images" IconColor="#EBDFDF" Content="Из галереи" Padding="0,4" IconPlacement="Top" IconIndent="-2" TextColor="#737373" IconWidth="100" IconHeight="100" CornerRadius="12" BackgroundColor="White" Grid.Column="0" Clicked="Photo_Gallery"/>
-                    <dx:DXButton Icon="cards" IconColor="#E8713F" Content="Готовые" Padding="0,4" IconPlacement="Top" IconIndent="-2" TextColor="#737373" IconWidth="100" IconHeight="100" CornerRadius="12" BackgroundColor="White" Grid.Column="1"/>
-                    <dx:DXButton Icon="file_ai" IconColor="#E8713F" Content="Созданные ИИ" Padding="0,4" IconPlacement="Top" IconIndent="-2" TextColor="#737373" IconWidth="100" IconHeight="100" CornerRadius="12" BackgroundColor="White" Grid.Column="2"/>
+                    <dx:DXButton IsEnabled="{Binding IsBackgroundPickedInv}" Icon="images" IconColor="#EBDFDF" Content="Из галереи" Padding="0,4" IconPlacement="Top" IconIndent="-2" TextColor="#737373" IconWidth="100" IconHeight="100" CornerRadius="12" BackgroundColor="White" Grid.Column="0" Clicked="Photo_Gallery"/>
+                    <dx:DXButton IsEnabled="{Binding IsBackgroundPickedInv}" Icon="cards" IconColor="#E8713F" Content="Готовые" Padding="0,4" IconPlacement="Top" IconIndent="-2" TextColor="#737373" IconWidth="100" IconHeight="100" CornerRadius="12" BackgroundColor="White" Clicked="Prefedined_Clicked2" Grid.Column="1"/>
+                    <dx:DXButton IsEnabled="{Binding IsBackgroundPickedInv}" Icon="file_ai" IconColor="#E8713F" Content="Созданные ИИ" Padding="0,4" IconPlacement="Top" IconIndent="-2" TextColor="#737373" IconWidth="100" IconHeight="100" CornerRadius="12" BackgroundColor="White" Grid.Column="2"/>
                 </Grid>
 
                 <Label Text="Выбор персонажа" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
-                    <dx:DXButton Icon="user_ai" IconColor="#E8713F" Content="Созданные ИИ" Padding="0,16" IconIndent="0" TextColor="#737373" IconWidth="50" IconHeight="50" CornerRadius="12" BackgroundColor="White" Grid.Column="0"/>
-                    <dx:DXButton Icon="users" IconColor="#E8713F" Content="Готовые" Padding="0,16" TextColor="#737373" IconWidth="50" IconHeight="50" CornerRadius="12" BackgroundColor="White" Clicked="Prefedined_Clicked" Grid.Column="1"/>
+                    <dx:DXButton IsEnabled="{Binding IsCharacterPickedInv}" Icon="user_ai" IconColor="#E8713F" Content="Созданные ИИ" Padding="0,16" IconIndent="0" TextColor="#737373" IconWidth="50" IconHeight="50" CornerRadius="12" BackgroundColor="White" Grid.Column="0"/>
+                    <dx:DXButton IsEnabled="{Binding IsCharacterPickedInv}" Icon="users" IconColor="#E8713F" Content="Готовые" Padding="0,16" TextColor="#737373" IconWidth="50" IconHeight="50" CornerRadius="12" BackgroundColor="White" Clicked="Prefedined_Clicked" Grid.Column="1"/>
                 </Grid>
 
                 <Label Text="Ввод текста для кадра" TextColor="#2F3441" FontSize="18" FontAttributes="Bold"/>
                 <dxe:MultilineEdit x:Name="TextField" BackgroundColor="White" BorderThickness="0" MinimumHeightRequest="90" MaxLineCount="5" CornerRadius="12" FocusedBorderThickness="0" ClearIconVisibility="Never" TextChanged="Text_Changed"/>
 
-                <dx:DXButton Content="Сгенерировать" Margin="32,0" CornerRadius="12" Padding="0,16" BackgroundColor="#E8713F" Clicked="Generate_Clicked"/>
+                <Grid ColumnDefinitions="*,2*" Margin="24,0" ColumnSpacing="16">
+                    <dx:DXButton Content="Сбросить"  CornerRadius="12" Padding="0,16" BackgroundColor="White" TextColor="#2F3441" Grid.Column="0" Clicked="Reset_Clicked"/>
+                    <dx:DXButton Content="Сгенерировать" CornerRadius="12" Padding="0,16" BackgroundColor="#E8713F" Clicked="Generate_Clicked" Grid.Column="1"/>
+                </Grid>
             </VerticalStackLayout>
         </dxc:BottomSheet>
 
         <!-- Sheet -->
-        <dxc:BottomSheet State="{Binding CharacterPickerBottomSheetState}">
-            <CollectionView ItemsSource="{Binding PredefinedCharacters}" SelectionMode="Single" SelectionChanged="CollectionView_SelectionChanged">
+        <dxc:BottomSheet State="{Binding PickerBottomSheetState}">
+            <CollectionView x:Name="Picker" SelectionMode="Single" SelectionChanged="CollectionView_SelectionChanged">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="3"/>
                 </CollectionView.ItemsLayout>
