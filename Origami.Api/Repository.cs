@@ -10,7 +10,7 @@ public static class Repository {
     static Repository() {
         var options = new RestClientOptions("http://31.129.109.90:3000");
         client = new RestClient(options);
-        httpClient = new HttpClient();
+        httpClient = new HttpClient(new ManagedClientHandler());
     }
 
     public static async Task<List<string>?> GetAllCharacters(CancellationToken cancellationToken = default) {

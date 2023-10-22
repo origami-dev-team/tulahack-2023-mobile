@@ -13,18 +13,6 @@
     <ShellContent Title="Лента"
         ContentTemplate="{DataTemplate local:MainPage}" />
 
-    <!-- <TabBar>
-       <Tab Title="Лента"
-            Icon="tumb">
-           <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
-       </Tab>
-       <Tab Icon="plus">
-           <ShellContent ContentTemplate="{DataTemplate local:ComixMakerPage}" />
-       </Tab>
-       <Tab Title="Профиль"
-            Icon="user">
-           <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
-       </Tab>
-    </TabBar> -->
+    
 
 </Shell>

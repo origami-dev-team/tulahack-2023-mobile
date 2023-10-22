@@ -10,7 +10,7 @@
     <ScrollView>
         <VerticalStackLayout>
             <VerticalStackLayout BackgroundColor="#191919">
-                <Image Source="photo" Margin="0,16" WidthRequest="120" HeightRequest="120">
+                <Image Source="photo.jpg" Margin="0,16" WidthRequest="120" HeightRequest="120">
                     <Image.Clip>
                         <EllipseGeometry Center="60,60" RadiusX="60" RadiusY="60"/>
                     </Image.Clip>
